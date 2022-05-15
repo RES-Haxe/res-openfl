@@ -1,0 +1,15 @@
+{
+  "name": "res-openfl",
+  "url": "",
+  "license": "MIT",
+  "tags": [],
+  "description": "RES OpenFL",
+  "version": "0.1.0",
+  "classPath": ".",
+  "releasenote": "Initial release",
+  "contributors": ["miriti"],
+  "dependencies": {
+    "res": "",
+    "openfl": ""
+  }
+}
