@@ -2,6 +2,7 @@ package res.openfl;
 
 import openfl.Lib;
 import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.DisplayObjectContainer;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
@@ -11,7 +12,8 @@ import openfl.geom.Point;
 import openfl.ui.GameInput;
 import res.audio.IAudioBuffer;
 import res.audio.IAudioStream;
-import res.storage.IStorage;
+import res.display.CRT;
+import res.storage.Storage;
 
 class BIOS extends res.bios.BIOS {
 	public var bitmap:Bitmap;
@@ -20,7 +22,6 @@ class BIOS extends res.bios.BIOS {
 	var res:RES;
 	var autosize:Bool;
 	var lastTime:Int;
-	var frameBuffer:FrameBuffer;
 
 	public function new(container:DisplayObjectContainer, autosize:Bool = true) {
 		super('OpenFL');
@@ -41,11 +42,11 @@ class BIOS extends res.bios.BIOS {
 	}
 
 	function resize() {
-		if (bitmap != null && frameBuffer != null) {
-			final s = Math.min(container.stage.stageWidth / frameBuffer.width, container.stage.stageHeight / frameBuffer.height);
+		if (bitmap != null) {
+			final s = Math.min(container.stage.stageWidth / bitmap.bitmapData.width, container.stage.stageHeight / bitmap.bitmapData.height);
 
-			bitmap.width = frameBuffer.width * s;
-			bitmap.height = frameBuffer.height * s;
+			bitmap.width = bitmap.bitmapData.width * s;
+			bitmap.height = bitmap.bitmapData.height * s;
 
 			bitmap.x = (container.stage.stageWidth - bitmap.width) / 2;
 			bitmap.y = (container.stage.stageHeight - bitmap.height) / 2;
@@ -109,18 +110,16 @@ class BIOS extends res.bios.BIOS {
 		return new AudioMixer();
 	}
 
-	public function createFrameBuffer(width:Int, height:Int, palette:Palette):FrameBuffer {
-		frameBuffer = new FrameBuffer(width, height, palette);
-
-		container.addChild(bitmap = new Bitmap(frameBuffer.bitmapData));
-
-		if (autosize)
-			resize();
-
-		return frameBuffer;
+	public function createStorage():Storage {
+		return new Storage();
 	}
 
-	public function createStorage():IStorage {
-		return null;
+	public function createCRT(width:Int, height:Int):CRT {
+		final bitmapData = new BitmapData(width, height, false);
+		bitmap = new Bitmap(bitmapData);
+		container.addChild(bitmap);
+		return new res.openfl.CRT(bitmapData);
 	}
+
+	public function startup() {}
 }

@@ -17,26 +17,26 @@ class AudioChannel extends res.audio.AudioChannel {
 		_loop = loop;
 	}
 
-	override function isEnded():Bool {
+	function isEnded():Bool {
 		return _ended;
 	}
 
-	override function isPlaying():Bool {
+	function isPlaying():Bool {
 		return _playing;
 	}
 
-	override function start() {
+	function start() {
 		play();
 	}
 
-	override function pause() {
+	function pause() {
 		_playing = false;
 		_position = channel.position;
 		channel.removeEventListener(Event.SOUND_COMPLETE, onSoundComplete);
 		channel.stop();
 	}
 
-	override function resume() {
+	function resume() {
 		play();
 	}
 
