@@ -1,5 +1,6 @@
 package res.openfl;
 
+import openfl.system.System;
 import openfl.Lib;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -122,4 +123,8 @@ class BIOS extends res.bios.BIOS {
 	}
 
 	public function startup() {}
+
+	override function shutdown() {
+		System.exit(0);
+	}
 }
