@@ -2,7 +2,7 @@ package res.openfl;
 
 import openfl.display.BitmapData;
 
-class CRT extends res.display.CRT {
+class CRT extends res.CRT {
 	private final bitmapData:BitmapData;
 
 	public function new(bitmapData:BitmapData) {

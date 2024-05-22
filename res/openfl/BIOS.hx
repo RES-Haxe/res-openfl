@@ -13,7 +13,7 @@ import openfl.geom.Point;
 import openfl.ui.GameInput;
 import res.audio.IAudioBuffer;
 import res.audio.IAudioStream;
-import res.display.CRT;
+import res.CRT;
 import res.storage.Storage;
 
 class BIOS extends res.bios.BIOS {

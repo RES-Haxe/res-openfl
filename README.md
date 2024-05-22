@@ -5,11 +5,12 @@
 project.xml:
 
 ```xml
-	<haxelib name="res" />
-	<haxelib name="res-openfl" />
+<haxelib name="res" />
+<haxelib name="res-openfl" />
 ```
 
 Main sprite:
+
 ```haxe
 import openfl.display.Sprite;
 import res.RES;
