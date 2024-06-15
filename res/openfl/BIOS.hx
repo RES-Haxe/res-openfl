@@ -1,19 +1,23 @@
 package res.openfl;
 
-import openfl.system.System;
 import openfl.Lib;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.DisplayObjectContainer;
 import openfl.events.Event;
+import openfl.events.GameInputEvent;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.events.TextEvent;
 import openfl.geom.Point;
+import openfl.system.System;
 import openfl.ui.GameInput;
+import openfl.ui.GameInputControl;
+import openfl.ui.GameInputDevice;
+import res.CRT;
 import res.audio.IAudioBuffer;
 import res.audio.IAudioStream;
-import res.CRT;
+import res.input.ControllerButton;
 import res.storage.Storage;
 
 class BIOS extends res.bios.BIOS {
@@ -90,7 +94,42 @@ class BIOS extends res.bios.BIOS {
 			}
 		});
 
-		if (GameInput.isSupported) {}
+		new GameInput().addEventListener(GameInputEvent.DEVICE_ADDED, (event) -> {
+			for (i in 0...event.device.numControls) {
+				final ctrl = event.device.getControlAt(i);
+
+				ctrl.addEventListener(Event.CHANGE, (event) -> {
+					if (!StringTools.startsWith(ctrl.id, 'AXIS_')) {
+						final ctrlMap:Map<String, ControllerButton> = [
+							// @formatter: off
+							'BUTTON_0' => A,
+							'BUTTON_1' => B,
+							'BUTTON_2' => X,
+							'BUTTON_3' => Y,
+							'BUTTON_4' => SELECT,
+							'BUTTON_6' => START,
+							'BUTTON_11' => UP,
+							'BUTTON_12' => DOWN,
+							'BUTTON_13' => LEFT,
+							'BUTTON_14' => RIGTH,
+							// @formatter: on
+						];
+
+						final btn = ctrlMap[ctrl.id];
+
+						if (btn != null) {
+							if (ctrl.value == 1) {
+								res.ctrl().press(btn);
+							} else {
+								res.ctrl().release(btn);
+							}
+						}
+					}
+				});
+			}
+
+			event.device.enabled = true;
+		});
 
 		if (autosize) {
 			container.stage.addEventListener(Event.RESIZE, (_) -> {
